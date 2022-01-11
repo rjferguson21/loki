@@ -15,6 +15,7 @@ monitoring:
 
 networkPolicies:
   enabled: false
+  controlPlaneCidr: 0.0.0.0/0
 
 monolith:
   enabled: true
@@ -24,7 +25,8 @@ monolith:
     pullPolicy: IfNotPresent
     pullSecrets:
     - private-registry
-
+  annotations:
+    istioVersion: 
 
 scalable:
   enabled: false
