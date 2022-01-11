@@ -17,6 +17,10 @@ spec:
         matchLabels:
           app.kubernetes.io/name: grafana
     ports:
-    - port: {{ .Values.service.port }}
+    {{- if .Values.monolith.enabled }}
+    - port: {{ .Values.monolith.service.port }}
+    {{- else if .Values.scalable.enabled }}
+    - port: 3100
+    {{- end }}
       protocol: TCP
 {{- end }}
