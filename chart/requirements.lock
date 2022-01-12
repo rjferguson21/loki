@@ -2,5 +2,11 @@ dependencies:
 - name: gluon
   repository: oci://registry.dso.mil/platform-one/big-bang/apps/library-charts/gluon
   version: 0.2.4
-digest: sha256:923a3908d3b4f7a00f7a1b4a231daefb6ce4800b6a6b6fd8a62cac637cff4c64
-generated: "2021-10-29T09:25:28.8470172-06:00"
+- name: loki-simple-scalable
+  repository: file://subcharts/loki-simple-scalable
+  version: 0.1.0
+- name: loki
+  repository: file://subcharts/loki
+  version: 2.8.5
+digest: sha256:e5b46e2448b120e2edadda446a27b4652ffad34348aab87e01aa3f5a7b5a835a
+generated: "2022-01-12T07:58:28.157211-05:00"
