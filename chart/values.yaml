@@ -38,8 +38,10 @@ scalable:
       pullPolicy: IfNotPresent
       pullSecrets:
       - private-registry
-
+  gateway:
+    enabled: false
 global:
+
   image: 
     registry: registry1.dso.mil
     repository: ironbank/opensource/grafana/grafana-loki

@@ -8,5 +8,5 @@ dependencies:
 - name: loki
   repository: file://subcharts/loki
   version: 2.8.5
-digest: sha256:e5b46e2448b120e2edadda446a27b4652ffad34348aab87e01aa3f5a7b5a835a
-generated: "2022-01-12T07:58:28.157211-05:00"
+digest: sha256:1ee5bda9fca62c4ed6fc85ea668c8c682efda86e95b82968da83f84622415f1f
+generated: "2022-01-12T08:41:34.537475-05:00"
