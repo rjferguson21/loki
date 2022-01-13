@@ -17,7 +17,7 @@ networkPolicies:
   enabled: false
   controlPlaneCidr: 0.0.0.0/0
 
-monolith:
+loki:
   enabled: true
   image:
     repository: registry1.dso.mil/ironbank/opensource/grafana/grafana-loki
@@ -26,7 +26,7 @@ monolith:
     pullSecrets:
     - private-registry
 
-scalable:
+loki-simple-scalable:
   enabled: false
   loki:
     image:
@@ -39,7 +39,6 @@ scalable:
   gateway:
     enabled: false
 global:
-
   image: 
     registry: registry1.dso.mil
     repository: ironbank/opensource/grafana/grafana-loki

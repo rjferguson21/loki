@@ -1,6 +1,6 @@
 apiVersion: "v1"
 name: loki
-version: 2.5.1-bb.C
+version: 2.5.1-bb.D
 appVersion: v2.3.0
 kubeVersion: "^1.10.0-0"
 description: "Loki: like Prometheus, but for logs."
@@ -19,10 +19,11 @@ dependencies:
   - name: loki-simple-scalable
     version: "*.*.*"
     repository: "file://subcharts/loki-simple-scalable"
-    alias: scalable
-    condition: scalable.enabled
+    condition: loki-simple-scalable.enabled
+    # alias: scalable
+    # condition: scalable.enabled
   - name: loki
     version: "*.*.*"
     repository: "file://subcharts/loki"
-    alias: monolith
-    condition: monolith.enabled
+    # alias: monolith
+    condition: loki.enabled
