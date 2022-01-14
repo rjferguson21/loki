@@ -1,0 +1,18 @@
+dependencies:
+  - name: gluon
+    version: 0.2.4
+    repository: "oci://registry.dso.mil/platform-one/big-bang/apps/library-charts/gluon"
+  - name: loki-simple-scalable
+    version: "*.*.*"
+    # repository: "file://subcharts/loki-simple-scalable"
+    repository: https://charts.bigbang.dev/loki-simple-scalable
+    condition: loki-simple-scalable.enabled
+    # alias: scalable
+    # condition: scalable.enabled
+  - name: loki
+    version: "*.*.*"
+    # repository: "file://subcharts/loki"
+    repository: https://charts.bigbang.dev/loki
+    # alias: monolith
+    condition: loki.enabled
+
