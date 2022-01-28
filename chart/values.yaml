@@ -30,9 +30,9 @@ loki-simple-scalable:
   enabled: false
   loki:
     image:
-      registry: registry1.dso.mil
-      repository: ironbank/opensource/grafana/grafana-loki
-      tag: 2.3.0
+      # registry: registry1.dso.mil
+      # repository: ironbank/opensource/grafana/grafana-loki
+      # tag: 2.3.0
       pullPolicy: IfNotPresent
       pullSecrets:
       - private-registry
@@ -40,9 +40,9 @@ loki-simple-scalable:
     enabled: false
 global:
   image: 
-    registry: registry1.dso.mil
-    repository: ironbank/opensource/grafana/grafana-loki
-    tag: 2.3.0
+    # registry: registry1.dso.mil
+    # repository: ironbank/opensource/grafana/grafana-loki
+    # tag: 2.3.0
     pullPolicy: IfNotPresent
     pullSecrets:
     - private-registry
