@@ -5,8 +5,6 @@ metadata:
   name: ingress-grafana
   namespace: {{ .Release.Namespace }}
 spec:
-  # limit this to just loki or query pods depending on 
-  # architecture
   podSelector: {}
   policyTypes:
   - Ingress
@@ -17,9 +15,9 @@ spec:
           app.kubernetes.io/name: monitoring
       podSelector:
         matchLabels:
-          app.kubernetes.io/name: grafana
+          app.kubernetes.io/name: prometheus
     ports:
     # Assumes no one changes this....
-    - port: 3100
+    - port: 15020
       protocol: TCP
 {{- end }}

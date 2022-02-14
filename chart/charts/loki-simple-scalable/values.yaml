@@ -31,11 +31,11 @@ loki:
     timeoutSeconds: 1
   image:
     # -- The Docker registry
-    registry: docker.io
+    registry: registry1.dso.mil
     # -- Docker image repository
-    repository: grafana/loki
+    repository: ironbank/opensource/grafana/loki
     # -- Overrides the image tag whose default is the chart's appVersion
-    tag: null
+    tag: 2.4.2
     # -- Docker image pull policy
     pullPolicy: IfNotPresent
   # -- Common annotations for all pods
@@ -70,15 +70,15 @@ loki:
         - "{{ include \"loki.fullname\" . }}-memberlist"
 
     common:
-      path_prefix: /var/loki
+      path_prefix: /data/loki
       replication_factor: 1
       ring:
         kvstore:
           store: memberlist
       storage:
         filesystem:
-          chunks_directory: /var/loki/chunks
-          rules_directory: /var/loki/rules
+          chunks_directory: /data/loki/chunks
+          rules_directory: /data/loki/rules
 
     limits_config:
       enforce_metric_name: false
