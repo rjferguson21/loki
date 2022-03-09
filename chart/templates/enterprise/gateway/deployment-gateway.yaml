@@ -1,3 +1,4 @@
+{{- if .Values.gel.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -49,6 +50,7 @@ spec:
         - name: {{ . }}
       {{- end }}
       {{- end }}
+
       containers:
         - name: enterprise-logs
           image: "{{ template "enterprise-logs.image" . }}"
@@ -133,3 +135,4 @@ spec:
         {{- if .Values.gel.gateway.extraVolumes }}
         {{ toYaml .Values.gel.gateway.extraVolumes | nindent 8 }}
         {{- end }}
+{{- end}}

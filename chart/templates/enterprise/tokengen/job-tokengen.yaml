@@ -1,4 +1,4 @@
-{{ if .Values.gel.tokengen.enable }}
+{{ if and .Values.gel.enabled .Values.gel.tokengen.enable }}
 apiVersion: batch/v1
 kind: Job
 metadata:

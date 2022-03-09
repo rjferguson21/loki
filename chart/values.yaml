@@ -40,13 +40,6 @@ loki:
       targetPort: grpc
       protocol: TCP
 
-  extraVolumes:
-    - name: var
-      emptyDir: {}
-  extraVolumeMounts:
-    - name: var
-      mountPath: /var/loki
-
   readinessProbe:
     initialDelaySeconds: 120
 
@@ -101,6 +94,7 @@ minio:
       memory: 128Mi
 
 gel:
+  enabled: true
   # -----------------------------------------
   # Configuration for `enterprise-logs` chart
   # -----------------------------------------

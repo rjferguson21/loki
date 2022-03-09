@@ -1,3 +1,4 @@
+{{- if .Values.gel.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,3 +20,4 @@ spec:
       targetPort: http-metrics
   selector:
     {{- include "enterprise-logs.gatewaySelectorLabels" . | nindent 4 }}
+{{- end }}
