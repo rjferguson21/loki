@@ -1,3 +1,11 @@
+global:
+  image: 
+    # registry: registry1.dso.mil
+    # repository: ironbank/opensource/grafana/grafana-loki
+    # tag: 2.3.0
+    pullPolicy: IfNotPresent
+    pullSecrets:
+    - private-registry
 
 domain: bigbang.dev
 
@@ -11,7 +19,6 @@ istio:
 
 monitoring:
   enabled: false
-
 
 networkPolicies:
   enabled: false
@@ -40,6 +47,12 @@ loki:
     - name: var
       mountPath: /var/loki
 
+  readinessProbe:
+    initialDelaySeconds: 120
+
+  livenessProbe:
+    initialDelaySeconds: 120
+
 loki-simple-scalable:
   enabled: false
   loki:
@@ -52,14 +65,7 @@ loki-simple-scalable:
       - private-registry
   gateway:
     enabled: false
-global:
-  image: 
-    # registry: registry1.dso.mil
-    # repository: ironbank/opensource/grafana/grafana-loki
-    # tag: 2.3.0
-    pullPolicy: IfNotPresent
-    pullSecrets:
-    - private-registry
+
 
 gateway:
   priorityClassName: null
