@@ -25,7 +25,7 @@ networkPolicies:
   controlPlaneCidr: 0.0.0.0/0
 
 loki:
-  enabled: true
+  enabled: false
   image:
     repository: docker.io/grafana/enterprise-logs
     tag: v1.3.0
@@ -39,6 +39,9 @@ loki:
       port: 9095
       targetPort: grpc
       protocol: TCP
+    - name: memberlist
+      port: 7946
+      protocol: TCP
 
   readinessProbe:
     initialDelaySeconds: 120
@@ -47,18 +50,22 @@ loki:
     initialDelaySeconds: 120
 
 loki-simple-scalable:
-  enabled: false
+  nameOverride: loki
+  enabled: true
+
   loki:
     image:
-      # registry: registry1.dso.mil
-      # repository: ironbank/opensource/grafana/grafana-loki
-      # tag: 2.3.0
+      registry: docker.io
+      repository: grafana/enterprise-logs
+      tag: v1.3.0
       pullPolicy: IfNotPresent
-      pullSecrets:
-      - private-registry
-  gateway:
-    enabled: false
 
+    existingSecretForConfig: enterprise-logs-config
+
+  gateway:
+    enabled: true
+    service:
+      port: 3100
 
 gateway:
   priorityClassName: null
@@ -165,35 +172,43 @@ gel:
 
     server:
       http_listen_port: 3100
+      grpc_listen_port: 9095
+
+    common:
+      replication_factor: 1
+      storage:
+        filesystem: null
+        s3:
+          endpoint: {{ include "enterprise-logs.minio" . }}
+          secret_access_key: supersecret
+          access_key_id: enterprise-logs
+          insecure: true
+          s3forcepathstyle: true
+
+    memberlist:
+      join_members:
+        - {{ include "loki.memberlist" . }}
 
     admin_client:
       storage:
         type: s3
         s3:
-          endpoint: {{ include "enterprise-logs.minio" . }}
           bucket_name: enterprise-logs-admin
-          secret_access_key: supersecret
-          access_key_id: enterprise-logs
-          insecure: true
 
     compactor:
       shared_store: s3
-      working_directory: /data/boltdb-shipper-compactor
+      working_directory: /var/loki/boltdb-shipper-compactor
       compaction_interval: 30s
 
     ingester:
       lifecycler:
         num_tokens: 512
-        ring:
-          replication_factor: 1
-          kvstore:
-            store: inmemory
       chunk_idle_period: 30m
       chunk_block_size: 262144
       chunk_encoding: snappy
       chunk_retain_period: 1m
       wal:
-        dir: /data/loki/wal
+        dir: /var/loki/wal
 
     ingester_client:
       grpc_client_config:
@@ -244,8 +259,8 @@ gel:
         s3forcepathstyle: true
         insecure: true
       boltdb_shipper:
-        active_index_directory: /data/loki/index
-        cache_location: /data/loki/cache
+        active_index_directory: /var/loki/index
+        cache_location: /var/loki/cache
         cache_ttl: 24h
         shared_store: s3
 
@@ -253,19 +268,13 @@ gel:
       storage:
         type: s3
         s3:
-          endpoint: {{ include "enterprise-logs.minio" . }}
           bucketnames: enterprise-logs-ruler
-          access_key_id: enterprise-logs
-          secret_access_key: supersecret
-          s3forcepathstyle: true
-          insecure: true
       enable_alertmanager_discovery: false
       enable_api: true
       enable_sharding: true
-      ring:
-        kvstore:
-          store: inmemory
-      rule_path: /data/loki
+      rule_path: /var/loki
+
+    
 
 
   # -- Configuration for `tokengen` target
@@ -527,130 +536,4 @@ gel:
     # -- Grace period to allow the compactor to shutdown before it is killed
     terminationGracePeriodSeconds: 300
 
-
-  # ------------------------------------------------
-  # Configuration for `loki-distributed` child chart
-  # ------------------------------------------------
-  loki-distributed:
-    # -- In order to have consistent Pod names for both pods from the enterprise-logs and loki-distributed chart, we override the name of the child chart to match the name of the parent chart.
-    nameOverride: enterprise-logs
-
-    # -- Definition of the ServiceAccount for containers
-    serviceAccount:
-      # -- Specifies whether a ServiceAccount should be created
-      create: true
-      # -- The name of the ServiceAccount to use.
-      # If not set and create is true, a name is generated using the fullname template
-      name: null
-      # -- Image pull secrets for the service account
-      imagePullSecrets: []
-      # -- Annotations for the service account
-      annotations: {}
-      # -- Set this toggle to false to opt out of automounting API credentials for the service account
-      automountServiceAccountToken: true
-
-    # RBAC configuration
-    rbac:
-      # -- If enabled, a PodSecurityPolicy is created
-      pspEnabled: true
-
-    # -- Compactor is defined in parent chart
-    compactor:
-      enabled: false
-
-    # -- Gateway is defined in parent chart
-    gateway:
-      enabled: false
-
-    # -- Table manager is not needed because we use boltdb-shipper and compactor
-    tableManager:
-      enabled: false
-
-    # -- Configuration for the `ruler` target
-    ruler:
-      enabled: true
-      extraVolumes:
-        # -- Create license volume from license secret
-        - name: license
-          secret:
-            secretName: enterprise-logs-license
-      extraVolumeMounts:
-        # -- Mount the license volume
-        - name: license
-          mountPath: /etc/enterprise-logs/license
-
-    # -- Configuration for the `ingester` target
-    ingester:
-      enabled: true
-      extraVolumes:
-        # -- Create license volume from license secret
-        - name: license
-          secret:
-            secretName: enterprise-logs-license
-      extraVolumeMounts:
-        # -- Mount the license volume
-        - name: license
-          mountPath: /etc/enterprise-logs/license
-      replicas: 3
-
-    # -- Configuration for the `distributor` target
-    distributor:
-      enabled: true
-      extraVolumes:
-        # -- Create license volume from license secret
-        - name: license
-          secret:
-            secretName: enterprise-logs-license
-      extraVolumeMounts:
-        # -- Mount the license volume
-        - name: license
-          mountPath: /etc/enterprise-logs/license
-
-    # -- Configuration for the `querier` target
-    querier:
-      enabled: true
-      extraVolumes:
-        # -- Create license volume from license secret
-        - name: license
-          secret:
-            secretName: enterprise-logs-license
-      extraVolumeMounts:
-        # -- Mount the license volume
-        - name: license
-          mountPath: /etc/enterprise-logs/license
-      persistence:
-        enabled: true
-
-    # -- Configuration for the `query-frontend` target
-    queryFrontend:
-      enabled: true
-      extraVolumes:
-        # -- Create license volume from license secret
-        - name: license
-          secret:
-            secretName: enterprise-logs-license
-      extraVolumeMounts:
-        # -- Mount the license volume
-        - name: license
-          mountPath: /etc/enterprise-logs/license
-
-    # -- Configuration for the `index-gateway` target
-    indexGateway:
-      enabled: true
-      extraVolumes:
-        # -- Create license volume from license secret
-        - name: license
-          secret:
-            secretName: enterprise-logs-license
-      extraVolumeMounts:
-        # -- Mount the license volume
-        - name: license
-          mountPath: /etc/enterprise-logs/license
-      persistence:
-        enabled: true
-
-    loki:
-      config: null
-      existingSecretForConfig: enterprise-logs-config
-      image: *image
 

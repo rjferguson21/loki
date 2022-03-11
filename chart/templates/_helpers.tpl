@@ -129,3 +129,16 @@ Return if ingress supports pathType.
 {{- define "loki.ingress.supportsPathType" -}}
   {{- or (eq (include "loki.ingress.isStable" .) "true") (and (eq (include "loki.ingress.apiVersion" .) "networking.k8s.io/v1beta1") (semverCompare ">= 1.18-0" .Capabilities.KubeVersion.Version)) -}}
 {{- end -}}
+
+
+{{/*
+gateway admin-api
+*/}}
+{{- define "loki.memberlist" -}}
+  {{- $memberlist := include "loki.fullname" .  -}}
+  {{- if (index .Values "loki-simple-scalable").enabled }}
+  {{- printf "%s-%s" $memberlist  "memberlist" -}}
+  {{- else }}
+  {{- print $memberlist}}
+  {{- end }}
+{{- end }}

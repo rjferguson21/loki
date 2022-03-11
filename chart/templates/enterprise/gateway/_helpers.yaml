@@ -2,7 +2,7 @@
 gateway fullname
 */}}
 {{- define "enterprise-logs.gatewayFullname" -}}
-{{ include "enterprise-logs.fullname" . }}-gateway
+{{ include "enterprise-logs.fullname" . }}-gel-gateway
 {{- end }}
 
 {{/*
@@ -21,4 +21,28 @@ gateway selector labels
 {{ include "enterprise-logs.selectorLabels" . }}
 app.kubernetes.io/component: gateway
 target: gateway
+{{- end }}
+
+{{/*
+gateway admin-api
+*/}}
+{{- define "enterprise-logs.gatewayAdminApi" -}}
+  {{- $adminApi := include "enterprise-logs.fullname" .  -}}
+  {{- if (index .Values "loki-simple-scalable").enabled }}
+  {{- printf "%s-%s" $adminApi "admin-api" -}}
+  {{- else }}
+  {{- print $adminApi }}
+  {{- end }}
+{{- end }}
+
+{{/*
+gateway admin-api
+*/}}
+{{- define "loki.gatewayUrl" -}}
+  {{- $url := include "enterprise-logs.fullname" .  -}}
+  {{- if (index .Values "loki-simple-scalable").enabled }}
+  {{- printf "%s-%s" $url "gateway" -}}
+  {{- else }}
+  {{- print $url}}
+  {{- end }}
 {{- end }}
