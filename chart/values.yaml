@@ -25,7 +25,7 @@ networkPolicies:
   controlPlaneCidr: 0.0.0.0/0
 
 loki:
-  enabled: false
+  enabled: true
   image:
     repository: docker.io/grafana/enterprise-logs
     tag: v1.3.0
@@ -39,7 +39,7 @@ loki:
       port: 9095
       targetPort: grpc
       protocol: TCP
-    - name: memberlist
+    - name: http-memberlist
       port: 7946
       protocol: TCP
 
@@ -51,7 +51,7 @@ loki:
 
 loki-simple-scalable:
   nameOverride: loki
-  enabled: true
+  enabled: false
 
   loki:
     image:
@@ -101,7 +101,7 @@ minio:
       memory: 128Mi
 
 gel:
-  enabled: true
+  enabled: false
   # -----------------------------------------
   # Configuration for `enterprise-logs` chart
   # -----------------------------------------
@@ -158,6 +158,7 @@ gel:
   # To set the license contents, use the flag `--set-file 'license.contents=./license.jwt'`
   license:
     contents: "NOTAVALIDLICENSE"
+    cluster_name: null
 
   # -- Grafana Enterprise Logs configuration file
   config: |

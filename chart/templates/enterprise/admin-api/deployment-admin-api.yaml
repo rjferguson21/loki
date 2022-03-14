@@ -1,3 +1,4 @@
+{{- if .Values.gel.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -171,3 +172,4 @@ spec:
               path: CAs/public.crt
         {{- end }}
         {{- end }}
+{{- end}}
