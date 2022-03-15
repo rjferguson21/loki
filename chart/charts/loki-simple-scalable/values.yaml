@@ -70,15 +70,15 @@ loki:
         - "{{ include \"loki.fullname\" . }}-memberlist"
 
     common:
-      path_prefix: /data/loki
+      path_prefix: /var/loki
       replication_factor: 1
       ring:
         kvstore:
           store: memberlist
       storage:
         filesystem:
-          chunks_directory: /data/loki/chunks
-          rules_directory: /data/loki/rules
+          chunks_directory: /var/loki/chunks
+          rules_directory: /var/loki/rules
 
     limits_config:
       enforce_metric_name: false
