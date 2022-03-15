@@ -31,9 +31,6 @@ loki:
     tag: v1.3.0
     pullPolicy: IfNotPresent
 
-  config: 
-    existingSecret: enterprise-logs-config
-
   extraPorts:
     - name: grpc
       port: 9095
@@ -44,10 +41,10 @@ loki:
       protocol: TCP
 
   readinessProbe:
-    initialDelaySeconds: 120
+    initialDelaySeconds: 30
 
   livenessProbe:
-    initialDelaySeconds: 120
+    initialDelaySeconds: 30
 
 loki-simple-scalable:
   nameOverride: loki
