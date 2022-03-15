@@ -50,15 +50,6 @@ loki-simple-scalable:
   nameOverride: loki
   enabled: false
 
-  loki:
-    image:
-      registry: docker.io
-      repository: grafana/enterprise-logs
-      tag: v1.3.0
-      pullPolicy: IfNotPresent
-
-    existingSecretForConfig: enterprise-logs-config
-
   gateway:
     enabled: true
     service:
@@ -271,8 +262,6 @@ gel:
       enable_api: true
       enable_sharding: true
       rule_path: /var/loki
-
-    
 
 
   # -- Configuration for `tokengen` target
