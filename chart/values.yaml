@@ -3,6 +3,7 @@ global:
     # registry: registry1.dso.mil
     # repository: ironbank/opensource/grafana/grafana-loki
     # tag: 2.3.0
+    priorityClassName: null
     pullPolicy: IfNotPresent
     pullSecrets:
     - private-registry
@@ -27,36 +28,23 @@ networkPolicies:
 loki:
   enabled: true
   image:
-    repository: docker.io/grafana/enterprise-logs
-    tag: v1.3.0
+    repository: registry1.dso.mil/ironbank/opensource/grafana/loki
+    tag: 2.4.2
     pullPolicy: IfNotPresent
-
-  extraPorts:
-    - name: grpc
-      port: 9095
-      targetPort: grpc
-      protocol: TCP
-    - name: http-memberlist
-      port: 7946
-      protocol: TCP
-
-  readinessProbe:
-    initialDelaySeconds: 30
-
-  livenessProbe:
-    initialDelaySeconds: 30
+    pullSecrets:
+      - private-registry
 
 loki-simple-scalable:
-  nameOverride: loki
   enabled: false
-
-  gateway:
-    enabled: true
-    service:
-      port: 3100
-
-gateway:
-  priorityClassName: null
+  image:
+    # -- The Docker registry
+    registry: registry1.dso.mil
+    # -- Docker image repository
+    repository: ironbank/opensource/grafana/loki
+    # -- Overrides the image tag whose default is the chart's appVersion
+    tag: 2.4.2
+    # -- Docker image pull policy
+    pullPolicy: IfNotPresent
 
 serviceAccount:
   create: true
