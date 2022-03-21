@@ -1,2 +1,11 @@
+loki:
+  enabled: true
+
+loki-simple-scalable:
+  enabled: false
+
+gel:
+  enabled: false
+
 imagePullSecrets:
 - name: private-registry
