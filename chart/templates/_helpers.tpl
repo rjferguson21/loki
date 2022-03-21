@@ -139,6 +139,6 @@ gateway admin-api
   {{- if (index .Values "loki-simple-scalable").enabled }}
   {{- printf "%s-%s" $memberlist  "memberlist" -}}
   {{- else }}
-  {{- print $memberlist}}
+  {{- printf "%s-%s" $memberlist  "headless" -}}
   {{- end }}
 {{- end }}
