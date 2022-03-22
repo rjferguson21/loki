@@ -34,6 +34,14 @@ loki:
     pullSecrets:
       - private-registry
 
+  resources: 
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
 loki-simple-scalable:
   enabled: false
   image:
@@ -57,6 +65,9 @@ serviceAccount:
 # -------------------------------------
 minio:
   enabled: true
+  image: 
+    repository: registry1.dso.mil/ironbank/opensource/minio
+    tag: RELEASE.2022-03-17T06-34-49Z
   accessKey: enterprise-logs
   secretKey: supersecret
   buckets:
