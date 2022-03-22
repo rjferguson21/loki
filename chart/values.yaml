@@ -164,7 +164,7 @@ gel:
 
     memberlist:
       join_members:
-        - {{ include "loki.memberlist" . }}
+        - {{ include "loki.fullname" . }}-memberlist-tcp
 
     admin_client:
       storage:
