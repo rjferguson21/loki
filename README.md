@@ -1,6 +1,6 @@
 # loki
 
-![Version: 2.5.1-bb.3](https://img.shields.io/badge/Version-2.5.1--bb.3-informational?style=flat-square) ![AppVersion: v2.3.0](https://img.shields.io/badge/AppVersion-v2.3.0-informational?style=flat-square)
+![Version: 3.0.0-bb.0](https://img.shields.io/badge/Version-3.0.0--bb.0-informational?style=flat-square) ![AppVersion: v2.4.2](https://img.shields.io/badge/AppVersion-v2.4.2-informational?style=flat-square)
 
 Loki: like Prometheus, but for logs.
 
@@ -37,6 +37,9 @@ helm install loki chart/
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| global.image.priorityClassName | string | `nil` |  |
+| global.image.pullPolicy | string | `"IfNotPresent"` |  |
+| global.image.pullSecrets[0] | string | `"private-registry"` |  |
 | domain | string | `"bigbang.dev"` |  |
 | istio.enabled | bool | `false` |  |
 | istio.loki.gateways[0] | string | `"istio-system/main"` |  |
@@ -44,492 +47,105 @@ helm install loki chart/
 | monitoring.enabled | bool | `false` |  |
 | networkPolicies.enabled | bool | `false` |  |
 | networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
-| monolith.enabled | bool | `true` |  |
-| monolith.image.repository | string | `"registry1.dso.mil/ironbank/opensource/grafana/grafana-loki"` |  |
-| monolith.image.tag | string | `"2.3.0"` |  |
-| monolith.image.pullPolicy | string | `"IfNotPresent"` |  |
-| monolith.image.pullSecrets[0] | string | `"private-registry"` |  |
-| monolith.annotations.istioVersion | string | `nil` |  |
-| scalable.enabled | bool | `false` |  |
-| scalable.loki.image.registry | string | `"registry1.dso.mil"` |  |
-| scalable.loki.image.repository | string | `"ironbank/opensource/grafana/grafana-loki"` |  |
-| scalable.loki.image.tag | string | `"2.3.0"` |  |
-| scalable.loki.image.pullPolicy | string | `"IfNotPresent"` |  |
-| scalable.loki.image.pullSecrets[0] | string | `"private-registry"` |  |
-| global.image.registry | string | `"registry1.dso.mil"` |  |
-| global.image.repository | string | `"ironbank/opensource/grafana/grafana-loki"` |  |
-| global.image.tag | string | `"2.3.0"` |  |
-| global.image.pullPolicy | string | `"IfNotPresent"` |  |
-| global.image.pullSecrets[0] | string | `"private-registry"` |  |
-
-## Contributing
-
-Please see the [contributing guide](./CONTRIBUTING.md) if you are interested in contributing.
-# loki
-
-![Version: 2.8.5](https://img.shields.io/badge/Version-2.8.5-informational?style=flat-square) ![AppVersion: v2.4.1](https://img.shields.io/badge/AppVersion-v2.4.1-informational?style=flat-square)
-
-Loki: like Prometheus, but for logs.
-
-## Upstream References
-* <https://grafana.com/loki>
-
-* <https://github.com/grafana/loki>
-
-## Learn More
-* [Application Overview](docs/overview.md)
-* [Other Documentation](docs/)
-
-## Pre-Requisites
-
-* Kubernetes Cluster deployed
-* Kubernetes config installed in `~/.kube/config`
-* Helm installed
-
-Kubernetes: `^1.10.0-0`
-
-Install Helm
-
-https://helm.sh/docs/intro/install/
-
-## Deployment
-
-* Clone down the repository
-* cd into directory
-```bash
-helm install loki chart/
-```
-
-## Values
-
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| image.repository | string | `"grafana/loki"` |  |
-| image.tag | string | `"2.4.1"` |  |
-| image.pullPolicy | string | `"IfNotPresent"` |  |
-| ingress.enabled | bool | `false` |  |
-| ingress.annotations | object | `{}` |  |
-| ingress.hosts[0].host | string | `"chart-example.local"` |  |
-| ingress.hosts[0].paths | list | `[]` |  |
-| ingress.tls | list | `[]` |  |
-| affinity | object | `{}` |  |
-| annotations | object | `{}` |  |
-| tracing.jaegerAgentHost | string | `nil` |  |
-| config.auth_enabled | bool | `false` |  |
-| config.ingester.chunk_idle_period | string | `"3m"` |  |
-| config.ingester.chunk_block_size | int | `262144` |  |
-| config.ingester.chunk_retain_period | string | `"1m"` |  |
-| config.ingester.max_transfer_retries | int | `0` |  |
-| config.ingester.wal.dir | string | `"/data/loki/wal"` |  |
-| config.ingester.lifecycler.ring.kvstore.store | string | `"inmemory"` |  |
-| config.ingester.lifecycler.ring.replication_factor | int | `1` |  |
-| config.limits_config.enforce_metric_name | bool | `false` |  |
-| config.limits_config.reject_old_samples | bool | `true` |  |
-| config.limits_config.reject_old_samples_max_age | string | `"168h"` |  |
-| config.schema_config.configs[0].from | string | `"2020-10-24"` |  |
-| config.schema_config.configs[0].store | string | `"boltdb-shipper"` |  |
-| config.schema_config.configs[0].object_store | string | `"filesystem"` |  |
-| config.schema_config.configs[0].schema | string | `"v11"` |  |
-| config.schema_config.configs[0].index.prefix | string | `"index_"` |  |
-| config.schema_config.configs[0].index.period | string | `"24h"` |  |
-| config.server.http_listen_port | int | `3100` |  |
-| config.storage_config.boltdb_shipper.active_index_directory | string | `"/data/loki/boltdb-shipper-active"` |  |
-| config.storage_config.boltdb_shipper.cache_location | string | `"/data/loki/boltdb-shipper-cache"` |  |
-| config.storage_config.boltdb_shipper.cache_ttl | string | `"24h"` |  |
-| config.storage_config.boltdb_shipper.shared_store | string | `"filesystem"` |  |
-| config.storage_config.filesystem.directory | string | `"/data/loki/chunks"` |  |
-| config.chunk_store_config.max_look_back_period | string | `"0s"` |  |
-| config.table_manager.retention_deletes_enabled | bool | `false` |  |
-| config.table_manager.retention_period | string | `"0s"` |  |
-| config.compactor.working_directory | string | `"/data/loki/boltdb-shipper-compactor"` |  |
-| config.compactor.shared_store | string | `"filesystem"` |  |
-| extraArgs | object | `{}` |  |
-| livenessProbe.httpGet.path | string | `"/ready"` |  |
-| livenessProbe.httpGet.port | string | `"http-metrics"` |  |
-| livenessProbe.initialDelaySeconds | int | `45` |  |
-| networkPolicy.enabled | bool | `false` |  |
-| client | object | `{}` |  |
-| nodeSelector | object | `{}` |  |
-| persistence.enabled | bool | `false` |  |
-| persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
-| persistence.size | string | `"10Gi"` |  |
-| persistence.annotations | object | `{}` |  |
-| podLabels | object | `{}` |  |
-| podAnnotations."prometheus.io/scrape" | string | `"true"` |  |
-| podAnnotations."prometheus.io/port" | string | `"http-metrics"` |  |
-| podManagementPolicy | string | `"OrderedReady"` |  |
-| rbac.create | bool | `true` |  |
-| rbac.pspEnabled | bool | `true` |  |
-| readinessProbe.httpGet.path | string | `"/ready"` |  |
-| readinessProbe.httpGet.port | string | `"http-metrics"` |  |
-| readinessProbe.initialDelaySeconds | int | `45` |  |
-| replicas | int | `1` |  |
-| resources | object | `{}` |  |
-| securityContext.fsGroup | int | `10001` |  |
-| securityContext.runAsGroup | int | `10001` |  |
-| securityContext.runAsNonRoot | bool | `true` |  |
-| securityContext.runAsUser | int | `10001` |  |
-| service.type | string | `"ClusterIP"` |  |
-| service.nodePort | string | `nil` |  |
-| service.port | int | `3100` |  |
-| service.annotations | object | `{}` |  |
-| service.labels | object | `{}` |  |
-| service.targetPort | string | `"http-metrics"` |  |
+| loki.enabled | bool | `true` |  |
+| loki.image.repository | string | `"registry1.dso.mil/ironbank/opensource/grafana/loki"` |  |
+| loki.image.tag | string | `"2.4.2"` |  |
+| loki.image.pullPolicy | string | `"IfNotPresent"` |  |
+| loki.image.pullSecrets[0] | string | `"private-registry"` |  |
+| loki-simple-scalable.enabled | bool | `false` |  |
+| loki-simple-scalable.image.registry | string | `"registry1.dso.mil"` | The Docker registry |
+| loki-simple-scalable.image.repository | string | `"ironbank/opensource/grafana/loki"` | Docker image repository |
+| loki-simple-scalable.image.tag | string | `"2.4.2"` | Overrides the image tag whose default is the chart's appVersion |
+| loki-simple-scalable.image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `nil` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.automountServiceAccountToken | bool | `true` |  |
-| terminationGracePeriodSeconds | int | `4800` |  |
-| tolerations | list | `[]` |  |
-| podDisruptionBudget | object | `{}` |  |
-| updateStrategy.type | string | `"RollingUpdate"` |  |
-| serviceMonitor.enabled | bool | `false` |  |
-| serviceMonitor.interval | string | `""` |  |
-| serviceMonitor.additionalLabels | object | `{}` |  |
-| serviceMonitor.annotations | object | `{}` |  |
-| initContainers | list | `[]` |  |
-| extraContainers | list | `[]` |  |
-| extraVolumes | list | `[]` |  |
-| extraVolumeMounts | list | `[]` |  |
-| extraPorts | list | `[]` |  |
-| env | list | `[]` |  |
-| alerting_groups | list | `[]` |  |
-
-## Contributing
-
-Please see the [contributing guide](./CONTRIBUTING.md) if you are interested in contributing.
-# loki-simple-scalable
-
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.4.1](https://img.shields.io/badge/AppVersion-2.4.1-informational?style=flat-square)
-
-Helm chart for Grafana Loki in simple, scalable mode
-
-## Upstream References
-* <https://grafana.github.io/helm-charts>
-
-* <https://github.com/grafana/loki>
-* <https://grafana.com/oss/loki/>
-* <https://grafana.com/docs/loki/latest/>
-
-## Learn More
-* [Application Overview](docs/overview.md)
-* [Other Documentation](docs/)
-
-## Pre-Requisites
-
-* Kubernetes Cluster deployed
-* Kubernetes config installed in `~/.kube/config`
-* Helm installed
-
-Install Helm
-
-https://helm.sh/docs/intro/install/
-
-## Deployment
-
-* Clone down the repository
-* cd into directory
-```bash
-helm install loki-simple-scalable chart/
-```
-
-## Values
-
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| global.image.registry | string | `nil` | Overrides the Docker registry globally for all images |
-| global.priorityClassName | string | `nil` | Overrides the priorityClassName for all pods |
-| global.clusterDomain | string | `"cluster.local"` | configures cluster domain ("cluster.local" by default) |
-| global.dnsService | string | `"kube-dns"` | configures DNS service name |
-| global.dnsNamespace | string | `"kube-system"` | configures DNS service namespace |
-| nameOverride | string | `nil` | Overrides the chart's name |
-| fullnameOverride | string | `nil` | Overrides the chart's computed fullname |
-| imagePullSecrets | list | `[]` | Image pull secrets for Docker images |
-| loki.readinessProbe.httpGet.path | string | `"/ready"` |  |
-| loki.readinessProbe.httpGet.port | string | `"http"` |  |
-| loki.readinessProbe.initialDelaySeconds | int | `30` |  |
-| loki.readinessProbe.timeoutSeconds | int | `1` |  |
-| loki.image.registry | string | `"docker.io"` | The Docker registry |
-| loki.image.repository | string | `"grafana/loki"` | Docker image repository |
-| loki.image.tag | string | `nil` | Overrides the image tag whose default is the chart's appVersion |
-| loki.image.pullPolicy | string | `"IfNotPresent"` | Docker image pull policy |
-| loki.podAnnotations | object | `{}` | Common annotations for all pods |
-| loki.revisionHistoryLimit | int | `10` | The number of old ReplicaSets to retain to allow rollback |
-| loki.podSecurityContext | object | `{"fsGroup":10001,"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001}` | The SecurityContext for Loki pods |
-| loki.containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}` | The SecurityContext for Loki containers |
-| loki.existingSecretForConfig | string | `""` | Specify an existing secret containing loki configuration. If non-empty, overrides `loki.config` |
-| loki.config | object | See values.yaml | Config file contents for Loki |
-| loki.storageConfig | object | loki.defaultStorageConfig | Common storage config component of loki configuration file. The must be overriden with a valid object storage backend in order for queries to work. |
-| loki.defaultStorageConfig | object | `{"filesystem":{"chunks_directory":"/var/loki/chunks,","rules_directory":"/var/loki/rules"}}` | Default storage config, used when no loki.storageConfig is provided. Required for CI, but queries will not work using these defaults. |
-| serviceAccount.create | bool | `true` | Specifies whether a ServiceAccount should be created |
-| serviceAccount.name | string | `nil` | The name of the ServiceAccount to use. If not set and create is true, a name is generated using the fullname template |
-| serviceAccount.imagePullSecrets | list | `[]` | Image pull secrets for the service account |
-| serviceAccount.annotations | object | `{}` | Annotations for the service account |
-| serviceAccount.automountServiceAccountToken | bool | `true` | Set this toggle to false to opt out of automounting API credentials for the service account |
-| rbac.pspEnabled | bool | `false` | If enabled, a PodSecurityPolicy is created |
-| serviceMonitor.enabled | bool | `false` | If enabled, ServiceMonitor resources for Prometheus Operator are created |
-| serviceMonitor.namespace | string | `nil` | Alternative namespace for ServiceMonitor resources |
-| serviceMonitor.namespaceSelector | object | `{}` | Namespace selector for ServiceMonitor resources |
-| serviceMonitor.annotations | object | `{}` | ServiceMonitor annotations |
-| serviceMonitor.labels | object | `{}` | Additional ServiceMonitor labels |
-| serviceMonitor.interval | string | `nil` | ServiceMonitor scrape interval |
-| serviceMonitor.scrapeTimeout | string | `nil` | ServiceMonitor scrape timeout in Go duration format (e.g. 15s) |
-| serviceMonitor.relabelings | list | `[]` | ServiceMonitor relabel configs to apply to samples before scraping https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig |
-| serviceMonitor.scheme | string | `"http"` | ServiceMonitor will use http by default, but you can pick https as well |
-| serviceMonitor.tlsConfig | string | `nil` | ServiceMonitor will use these tlsConfig settings to make the health check requests |
-| prometheusRule.enabled | bool | `false` | If enabled, a PrometheusRule resource for Prometheus Operator is created |
-| prometheusRule.namespace | string | `nil` | Alternative namespace for the PrometheusRule resource |
-| prometheusRule.annotations | object | `{}` | PrometheusRule annotations |
-| prometheusRule.labels | object | `{}` | Additional PrometheusRule labels |
-| prometheusRule.groups | list | `[]` | Contents of Prometheus rules file |
-| write.replicas | int | `1` | Number of replicas for the write |
-| write.image.registry | string | `nil` | The Docker registry for the write image. Overrides `loki.image.registry` |
-| write.image.repository | string | `nil` | Docker image repository for the write image. Overrides `loki.image.repository` |
-| write.image.tag | string | `nil` | Docker image tag for the write image. Overrides `loki.image.tag` |
-| write.priorityClassName | string | `nil` | The name of the PriorityClass for write pods |
-| write.podAnnotations | object | `{}` | Annotations for write pods |
-| write.serviceLabels | object | `{}` | Labels for ingestor service |
-| write.extraArgs | list | `[]` | Additional CLI args for the write |
-| write.extraEnv | list | `[]` | Environment variables to add to the write pods |
-| write.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to the write pods |
-| write.extraVolumeMounts | list | `[]` | Volume mounts to add to the write pods |
-| write.extraVolumes | list | `[]` | Volumes to add to the write pods |
-| write.resources | object | `{}` | Resource requests and limits for the write |
-| write.terminationGracePeriodSeconds | int | `300` | Grace period to allow the write to shutdown before it is killed. Especially for the ingestor, this must be increased. It must be long enough so writes can be gracefully shutdown flushing/transferring all data and to successfully leave the member ring on shutdown. |
-| write.affinity | string | Hard node and soft zone anti-affinity | Affinity for write pods. Passed through `tpl` and, thus, to be configured as string |
-| write.nodeSelector | object | `{}` | Node selector for write pods |
-| write.tolerations | list | `[]` | Tolerations for write pods |
-| write.persistence.size | string | `"10Gi"` | Size of persistent disk |
-| write.persistence.storageClass | string | `nil` | Storage class to be used. If defined, storageClassName: <storageClass>. If set to "-", storageClassName: "", which disables dynamic provisioning. If empty or set to null, no storageClassName spec is set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack). |
-| read.replicas | int | `1` | Number of replicas for the read |
-| read.autoscaling.enabled | bool | `false` | Enable autoscaling for the read, this is only used if `queryIndex.enabled: true` |
-| read.autoscaling.minReplicas | int | `1` | Minimum autoscaling replicas for the read |
-| read.autoscaling.maxReplicas | int | `3` | Maximum autoscaling replicas for the read |
-| read.autoscaling.targetCPUUtilizationPercentage | int | `60` | Target CPU utilisation percentage for the read |
-| read.autoscaling.targetMemoryUtilizationPercentage | string | `nil` | Target memory utilisation percentage for the read |
-| read.image.registry | string | `nil` | The Docker registry for the read image. Overrides `loki.image.registry` |
-| read.image.repository | string | `nil` | Docker image repository for the read image. Overrides `loki.image.repository` |
-| read.image.tag | string | `nil` | Docker image tag for the read image. Overrides `loki.image.tag` |
-| read.priorityClassName | string | `nil` | The name of the PriorityClass for read pods |
-| read.podAnnotations | object | `{}` | Annotations for read pods |
-| read.serviceLabels | object | `{}` | Labels for read service |
-| read.extraArgs | list | `[]` | Additional CLI args for the read |
-| read.extraEnv | list | `[]` | Environment variables to add to the read pods |
-| read.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to the read pods |
-| read.extraVolumeMounts | list | `[]` | Volume mounts to add to the read pods |
-| read.extraVolumes | list | `[]` | Volumes to add to the read pods |
-| read.resources | object | `{}` | Resource requests and limits for the read |
-| read.terminationGracePeriodSeconds | int | `30` | Grace period to allow the read to shutdown before it is killed |
-| read.affinity | string | Hard node and soft zone anti-affinity | Affinity for read pods. Passed through `tpl` and, thus, to be configured as string |
-| read.nodeSelector | object | `{}` | Node selector for read pods |
-| read.tolerations | list | `[]` | Tolerations for read pods |
-| read.persistence.size | string | `"10Gi"` | Size of persistent disk |
-| read.persistence.storageClass | string | `nil` | Storage class to be used. If defined, storageClassName: <storageClass>. If set to "-", storageClassName: "", which disables dynamic provisioning. If empty or set to null, no storageClassName spec is set, choosing the default provisioner (gp2 on AWS, standard on GKE, AWS, and OpenStack). |
-| gateway.enabled | bool | `true` | Specifies whether the gateway should be enabled |
-| gateway.replicas | int | `1` | Number of replicas for the gateway |
-| gateway.verboseLogging | bool | `true` | Enable logging of 2xx and 3xx HTTP requests |
-| gateway.autoscaling.enabled | bool | `false` | Enable autoscaling for the gateway |
-| gateway.autoscaling.minReplicas | int | `1` | Minimum autoscaling replicas for the gateway |
-| gateway.autoscaling.maxReplicas | int | `3` | Maximum autoscaling replicas for the gateway |
-| gateway.autoscaling.targetCPUUtilizationPercentage | int | `60` | Target CPU utilisation percentage for the gateway |
-| gateway.autoscaling.targetMemoryUtilizationPercentage | string | `nil` | Target memory utilisation percentage for the gateway |
-| gateway.deploymentStrategy | object | `{"type":"RollingUpdate"}` | See `kubectl explain deployment.spec.strategy` for more -- ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy |
-| gateway.image.registry | string | `"docker.io"` | The Docker registry for the gateway image |
-| gateway.image.repository | string | `"nginxinc/nginx-unprivileged"` | The gateway image repository |
-| gateway.image.tag | string | `"1.19-alpine"` | The gateway image tag |
-| gateway.image.pullPolicy | string | `"IfNotPresent"` | The gateway image pull policy |
-| gateway.priorityClassName | string | `nil` | The name of the PriorityClass for gateway pods |
-| gateway.podAnnotations | object | `{}` | Annotations for gateway pods |
-| gateway.extraArgs | list | `[]` | Additional CLI args for the gateway |
-| gateway.extraEnv | list | `[]` | Environment variables to add to the gateway pods |
-| gateway.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to the gateway pods |
-| gateway.extraVolumes | list | `[]` | Volumes to add to the gateway pods |
-| gateway.extraVolumeMounts | list | `[]` | Volume mounts to add to the gateway pods |
-| gateway.podSecurityContext | object | `{"fsGroup":101,"runAsGroup":101,"runAsNonRoot":true,"runAsUser":101}` | The SecurityContext for gateway containers |
-| gateway.containerSecurityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true}` | The SecurityContext for gateway containers |
-| gateway.resources | object | `{}` | Resource requests and limits for the gateway |
-| gateway.terminationGracePeriodSeconds | int | `30` | Grace period to allow the gateway to shutdown before it is killed |
-| gateway.affinity | string | Hard node and soft zone anti-affinity | Affinity for gateway pods. Passed through `tpl` and, thus, to be configured as string |
-| gateway.nodeSelector | object | `{}` | Node selector for gateway pods |
-| gateway.tolerations | list | `[]` | Tolerations for gateway pods |
-| gateway.service.port | int | `80` | Port of the gateway service |
-| gateway.service.type | string | `"ClusterIP"` | Type of the gateway service |
-| gateway.service.clusterIP | string | `nil` | ClusterIP of the gateway service |
-| gateway.service.nodePort | string | `nil` | Node port if service type is NodePort |
-| gateway.service.loadBalancerIP | string | `nil` | Load balancer IPO address if service type is LoadBalancer |
-| gateway.service.annotations | object | `{}` | Annotations for the gateway service |
-| gateway.service.labels | object | `{}` | Labels for gateway service |
-| gateway.ingress.enabled | bool | `false` | Specifies whether an ingress for the gateway should be created |
-| gateway.ingress.annotations | object | `{}` | Ingress Class Name. MAY be required for Kubernetes versions >= 1.18 ingressClassName: nginx -- Annotations for the gateway ingress |
-| gateway.ingress.hosts | list | `[{"host":"gateway.loki.example.com","paths":[{"path":"/"}]}]` | Hosts configuration for the gateway ingress |
-| gateway.ingress.tls | list | `[{"hosts":["gateway.loki.example.com"],"secretName":"loki-gateway-tls"}]` | TLS configuration for the gateway ingress |
-| gateway.basicAuth.enabled | bool | `false` | Enables basic authentication for the gateway |
-| gateway.basicAuth.username | string | `nil` | The basic auth username for the gateway |
-| gateway.basicAuth.password | string | `nil` | The basic auth password for the gateway |
-| gateway.basicAuth.htpasswd | string | `"{{ htpasswd (required \"'gateway.basicAuth.username' is required\" .Values.gateway.basicAuth.username) (required \"'gateway.basicAuth.password' is required\" .Values.gateway.basicAuth.password) }}"` | Uses the specified username and password to compute a htpasswd using Sprig's `htpasswd` function. The value is templated using `tpl`. Override this to use a custom htpasswd, e.g. in case the default causes high CPU load. |
-| gateway.basicAuth.existingSecret | string | `nil` | Existing basic auth secret to use. Must contain '.htpasswd' |
-| gateway.readinessProbe.httpGet.path | string | `"/"` |  |
-| gateway.readinessProbe.httpGet.port | string | `"http"` |  |
-| gateway.readinessProbe.initialDelaySeconds | int | `15` |  |
-| gateway.readinessProbe.timeoutSeconds | int | `1` |  |
-| gateway.nginxConfig.logFormat | string | `"main '$remote_addr - $remote_user [$time_local]  $status '\n        '\"$request\" $body_bytes_sent \"$http_referer\" '\n        '\"$http_user_agent\" \"$http_x_forwarded_for\"';"` | NGINX log format |
-| gateway.nginxConfig.serverSnippet | string | `""` | Allows appending custom configuration to the server block |
-| gateway.nginxConfig.httpSnippet | string | `""` | Allows appending custom configuration to the http block |
-| gateway.nginxConfig.file | string | See values.yaml | Config file contents for Nginx. Passed through the `tpl` function to allow templating |
-| networkPolicy.enabled | bool | `false` | Specifies whether Network Policies should be created |
-| networkPolicy.metrics.podSelector | object | `{}` | Specifies the Pods which are allowed to access the metrics port. As this is cross-namespace communication, you also need the namespaceSelector. |
-| networkPolicy.metrics.namespaceSelector | object | `{}` | Specifies the namespaces which are allowed to access the metrics port |
-| networkPolicy.metrics.cidrs | list | `[]` | Specifies specific network CIDRs which are allowed to access the metrics port. In case you use namespaceSelector, you also have to specify your kubelet networks here. The metrics ports are also used for probes. |
-| networkPolicy.ingress.podSelector | object | `{}` | Specifies the Pods which are allowed to access the http port. As this is cross-namespace communication, you also need the namespaceSelector. |
-| networkPolicy.ingress.namespaceSelector | object | `{}` | Specifies the namespaces which are allowed to access the http port |
-| networkPolicy.alertmanager.port | int | `9093` | Specify the alertmanager port used for alerting |
-| networkPolicy.alertmanager.podSelector | object | `{}` | Specifies the alertmanager Pods. As this is cross-namespace communication, you also need the namespaceSelector. |
-| networkPolicy.alertmanager.namespaceSelector | object | `{}` | Specifies the namespace the alertmanager is running in |
-| networkPolicy.externalStorage.ports | list | `[]` | Specify the port used for external storage, e.g. AWS S3 |
-| networkPolicy.externalStorage.cidrs | list | `[]` | Specifies specific network CIDRs you want to limit access to |
-| networkPolicy.discovery.port | string | `nil` | Specify the port used for discovery |
-| networkPolicy.discovery.podSelector | object | `{}` | Specifies the Pods labels used for discovery. As this is cross-namespace communication, you also need the namespaceSelector. |
-| networkPolicy.discovery.namespaceSelector | object | `{}` | Specifies the namespace the discovery Pods are running in |
-
-## Contributing
-
-Please see the [contributing guide](./CONTRIBUTING.md) if you are interested in contributing.
-# loki
-
-![Version: 2.5.1-bb.2](https://img.shields.io/badge/Version-2.5.1--bb.2-informational?style=flat-square) ![AppVersion: v2.3.0](https://img.shields.io/badge/AppVersion-v2.3.0-informational?style=flat-square)
-
-Loki: like Prometheus, but for logs.
-
-## Upstream References
-* <https://grafana.com/loki>
-
-* <https://github.com/grafana/loki>
-
-## Learn More
-* [Application Overview](docs/overview.md)
-* [Other Documentation](docs/)
-
-## Pre-Requisites
-
-* Kubernetes Cluster deployed
-* Kubernetes config installed in `~/.kube/config`
-* Helm installed
-
-Kubernetes: `^1.10.0-0`
-
-Install Helm
-
-https://helm.sh/docs/intro/install/
-
-## Deployment
-
-* Clone down the repository
-* cd into directory
-```bash
-helm install loki chart/
-```
-
-## Values
-
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| image.repository | string | `"registry1.dso.mil/ironbank/opensource/grafana/grafana-loki"` |  |
-| image.tag | string | `"2.3.0"` |  |
-| image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.pullSecrets[0] | string | `"private-registry"` |  |
-| ingress.enabled | bool | `false` |  |
-| ingress.annotations | object | `{}` |  |
-| ingress.hosts[0].host | string | `"chart-example.local"` |  |
-| ingress.hosts[0].paths | list | `[]` |  |
-| ingress.tls | list | `[]` |  |
-| imagePullSecrets | object | `{}` |  |
-| affinity | object | `{}` |  |
-| annotations | object | `{}` |  |
-| tracing.jaegerAgentHost | string | `nil` |  |
-| config.auth_enabled | bool | `false` |  |
-| config.ingester.chunk_idle_period | string | `"3m"` |  |
-| config.ingester.chunk_block_size | int | `262144` |  |
-| config.ingester.chunk_retain_period | string | `"1m"` |  |
-| config.ingester.max_transfer_retries | int | `0` |  |
-| config.ingester.lifecycler.ring.kvstore.store | string | `"inmemory"` |  |
-| config.ingester.lifecycler.ring.replication_factor | int | `1` |  |
-| config.limits_config.enforce_metric_name | bool | `false` |  |
-| config.limits_config.reject_old_samples | bool | `true` |  |
-| config.limits_config.reject_old_samples_max_age | string | `"168h"` |  |
-| config.schema_config.configs[0].from | string | `"2020-10-24"` |  |
-| config.schema_config.configs[0].store | string | `"boltdb-shipper"` |  |
-| config.schema_config.configs[0].object_store | string | `"filesystem"` |  |
-| config.schema_config.configs[0].schema | string | `"v11"` |  |
-| config.schema_config.configs[0].index.prefix | string | `"index_"` |  |
-| config.schema_config.configs[0].index.period | string | `"24h"` |  |
-| config.server.http_listen_port | int | `3100` |  |
-| config.storage_config.boltdb_shipper.active_index_directory | string | `"/data/loki/boltdb-shipper-active"` |  |
-| config.storage_config.boltdb_shipper.cache_location | string | `"/data/loki/boltdb-shipper-cache"` |  |
-| config.storage_config.boltdb_shipper.cache_ttl | string | `"24h"` |  |
-| config.storage_config.boltdb_shipper.shared_store | string | `"filesystem"` |  |
-| config.storage_config.filesystem.directory | string | `"/data/loki/chunks"` |  |
-| config.chunk_store_config.max_look_back_period | string | `"0s"` |  |
-| config.table_manager.retention_deletes_enabled | bool | `false` |  |
-| config.table_manager.retention_period | string | `"0s"` |  |
-| config.compactor.working_directory | string | `"/data/loki/boltdb-shipper-compactor"` |  |
-| config.compactor.shared_store | string | `"filesystem"` |  |
-| extraArgs | object | `{}` |  |
-| livenessProbe.httpGet.path | string | `"/ready"` |  |
-| livenessProbe.httpGet.port | string | `"http-metrics"` |  |
-| livenessProbe.initialDelaySeconds | int | `45` |  |
-| networkPolicy.enabled | bool | `false` |  |
-| networkPolicies.enabled | bool | `false` |  |
-| networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
-| monitoring.enabled | bool | `false` |  |
-| client | object | `{}` |  |
-| nodeSelector | object | `{}` |  |
-| persistence.enabled | bool | `false` |  |
-| persistence.accessModes[0] | string | `"ReadWriteOnce"` |  |
-| persistence.size | string | `"10Gi"` |  |
-| persistence.annotations | object | `{}` |  |
-| podLabels | object | `{}` |  |
-| podAnnotations."prometheus.io/scrape" | string | `"true"` |  |
-| podAnnotations."prometheus.io/port" | string | `"http-metrics"` |  |
-| podManagementPolicy | string | `"OrderedReady"` |  |
-| rbac.create | bool | `true` |  |
-| rbac.pspEnabled | bool | `true` |  |
-| readinessProbe.httpGet.path | string | `"/ready"` |  |
-| readinessProbe.httpGet.port | string | `"http-metrics"` |  |
-| readinessProbe.initialDelaySeconds | int | `45` |  |
-| replicas | int | `1` |  |
-| resources.limits.cpu | string | `"250m"` |  |
-| resources.limits.memory | string | `"256Mi"` |  |
-| resources.requests.cpu | string | `"250m"` |  |
-| resources.requests.memory | string | `"256Mi"` |  |
-| securityContext.fsGroup | int | `10001` |  |
-| securityContext.runAsGroup | int | `10001` |  |
-| securityContext.runAsNonRoot | bool | `true` |  |
-| securityContext.runAsUser | int | `10001` |  |
-| service.type | string | `"ClusterIP"` |  |
-| service.nodePort | string | `nil` |  |
-| service.port | int | `3100` |  |
-| service.annotations | object | `{}` |  |
-| service.labels | object | `{}` |  |
-| service.targetPort | string | `"http-metrics"` |  |
-| serviceAccount.create | bool | `true` |  |
-| serviceAccount.name | string | `nil` |  |
-| serviceAccount.annotations | object | `{}` |  |
-| serviceAccount.automountServiceAccountToken | bool | `true` |  |
-| terminationGracePeriodSeconds | int | `4800` |  |
-| tolerations | list | `[]` |  |
-| podDisruptionBudget | object | `{}` |  |
-| updateStrategy.type | string | `"RollingUpdate"` |  |
-| serviceMonitor.enabled | bool | `false` |  |
-| serviceMonitor.interval | string | `""` |  |
-| serviceMonitor.additionalLabels | object | `{}` |  |
-| serviceMonitor.annotations | object | `{}` |  |
-| initContainers | list | `[]` |  |
-| extraContainers | list | `[]` |  |
-| extraVolumes | list | `[]` |  |
-| extraVolumeMounts | list | `[]` |  |
-| extraPorts | list | `[]` |  |
-| env | list | `[]` |  |
-| alerting_groups | list | `[]` |  |
+| minio.enabled | bool | `true` |  |
+| minio.accessKey | string | `"enterprise-logs"` |  |
+| minio.secretKey | string | `"supersecret"` |  |
+| minio.buckets[0].name | string | `"enterprise-logs-tsdb"` |  |
+| minio.buckets[0].policy | string | `"none"` |  |
+| minio.buckets[0].purge | bool | `false` |  |
+| minio.buckets[1].name | string | `"enterprise-logs-admin"` |  |
+| minio.buckets[1].policy | string | `"none"` |  |
+| minio.buckets[1].purge | bool | `false` |  |
+| minio.buckets[2].name | string | `"enterprise-logs-ruler"` |  |
+| minio.buckets[2].policy | string | `"none"` |  |
+| minio.buckets[2].purge | bool | `false` |  |
+| minio.persistence.size | string | `"5Gi"` |  |
+| minio.resources.requests.cpu | string | `"100m"` |  |
+| minio.resources.requests.memory | string | `"128Mi"` |  |
+| gel.enabled | bool | `false` |  |
+| gel.nameOverride | string | `nil` | Overrides the chart's name |
+| gel.fullnameOverride | string | `nil` | Overrides the chart's computed fullname |
+| gel.image | object | `{"pullPolicy":"IfNotPresent","pullSecrets":[],"registry":"docker.io","repository":"grafana/enterprise-logs","tag":"v1.3.0"}` | Definition of the Docker image for Grafana Enterprise Logs If the image block is overwritten in a custom values file, it is also required to update the values in the `loki-distributed.loki.image` block. This can be done by copying the values, or like here, by using an anchor and a pointer. |
+| gel.image.registry | string | `"docker.io"` | The container registry to use |
+| gel.image.repository | string | `"grafana/enterprise-logs"` | The image repository to use |
+| gel.image.tag | string | `"v1.3.0"` | The version of Grafana Enterprise Logs |
+| gel.image.pullPolicy | string | `"IfNotPresent"` | Defines the policy how and when images are pulled |
+| gel.image.pullSecrets | list | `[]` | Additional image pull secrets |
+| gel.serviceAccount | object | `{"create":true}` | Definition of the ServiceAccount for containers Any additional configuration of the ServiceAccount has to be done in `loki-distributed.serviceAccount`. |
+| gel.serviceAccount.create | bool | `true` | Specifies whether a ServiceAccount should be created If this value is changed to `false`, it also needs to be reflected in `loki-distributed.serviceAccount.create`. |
+| gel.useExternalConfig | bool | `false` | External config.yaml A GEL configuration file may be provided as Kubernetes Secret outside of this Helm chart. |
+| gel.externalConfigName | string | `"enterprise-logs-config"` |  |
+| gel.externalConfigVersion | string | `"0"` |  |
+| gel.useExternalLicense | bool | `false` | External license.jwt A GEL license file may be provided as Kubernetes Secret outside of this Helm chart. |
+| gel.externalLicenseName | string | `"enterprise-logs-license"` |  |
+| gel.externalLicenseVersion | string | `"0"` |  |
+| gel.license | object | `{"cluster_name":null,"contents":"NOTAVALIDLICENSE"}` | Grafana Enterprise Logs license In order to use Grafana Enterprise Logs features, you will need to provide the contents of your Grafana Enterprise Logs license, either by providing the contents of the license.jwt, or the name Kubernetes Secret that contains your license.jwt. To set the license contents, use the flag `--set-file 'license.contents=./license.jwt'` |
+| gel.config | string | `"auth:\n  type: enterprise\nauth_enabled: true\n\nlicense:\n  path: \"/etc/enterprise-logs/license/license.jwt\"\n\ncluster_name: {{ .Release.Name }}\n\nserver:\n  http_listen_port: 3100\n  grpc_listen_port: 9095\n\ncommon:\n  replication_factor: 1\n  storage:\n    filesystem: null\n    s3:\n      endpoint: {{ include \"enterprise-logs.minio\" . }}\n      secret_access_key: supersecret\n      access_key_id: enterprise-logs\n      insecure: true\n      s3forcepathstyle: true\n\nmemberlist:\n  join_members:\n    - {{ include \"loki.fullname\" . }}-memberlist-tcp\n\nadmin_client:\n  storage:\n    type: s3\n    s3:\n      bucket_name: enterprise-logs-admin\n\ncompactor:\n  shared_store: s3\n  working_directory: /var/loki/boltdb-shipper-compactor\n  compaction_interval: 30s\n\ningester:\n  lifecycler:\n    num_tokens: 512\n  chunk_idle_period: 30m\n  chunk_block_size: 262144\n  chunk_encoding: snappy\n  chunk_retain_period: 1m\n  wal:\n    dir: /var/loki/wal\n\ningester_client:\n  grpc_client_config:\n    max_recv_msg_size: 104857600\n    max_send_msg_size: 104857600\n\nlimits_config:\n  enforce_metric_name: false\n  reject_old_samples: true\n  reject_old_samples_max_age: 168h\n  max_cache_freshness_per_query: 10m\n\nfrontend:\n  log_queries_longer_than: 10s\n  compress_responses: true\n  tail_proxy_url: http://{{ include \"loki.fullname\" . }}:3100\n\nquerier:\n  query_ingesters_within: 12h\n\nquery_range:\n  split_queries_by_interval: 24h\n  align_queries_with_step: true\n  cache_results: true\n  results_cache:\n    cache:\n      memcached:\n        expiration: 1h\n      memcached_client:\n        timeout: 1s\n\nschema_config:\n  configs:\n    - from: 2021-01-01\n      store: boltdb-shipper\n      object_store: aws\n      schema: v11\n      index:\n        prefix: index_\n        period: 24h\n\nstorage_config:\n  aws:\n    endpoint: {{ include \"enterprise-logs.minio\" . }}\n    bucketnames: enterprise-logs-tsdb\n    access_key_id: enterprise-logs\n    secret_access_key: supersecret\n    s3forcepathstyle: true\n    insecure: true\n  boltdb_shipper:\n    active_index_directory: /var/loki/index\n    cache_location: /var/loki/cache\n    cache_ttl: 24h\n    shared_store: s3\n\nruler:\n  storage:\n    type: s3\n    s3:\n      bucketnames: enterprise-logs-ruler\n  enable_alertmanager_discovery: false\n  enable_api: true\n  enable_sharding: true\n  rule_path: /var/loki\n"` | Grafana Enterprise Logs configuration file |
+| gel.tokengen | object | `{"annotations":{},"enable":true,"env":[],"extraArgs":{},"extraVolumeMounts":[],"extraVolumes":[],"labels":{},"priorityClassName":null,"securityContext":{"fsGroup":10001,"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001}}` | Configuration for `tokengen` target |
+| gel.tokengen.enable | bool | `true` | Whether the job should be part of the deployment |
+| gel.tokengen.extraArgs | object | `{}` | Additional CLI arguments for the `tokengen` target |
+| gel.tokengen.env | list | `[]` | Additional Kubernetes environment |
+| gel.tokengen.labels | object | `{}` | Additional labels for the `tokengen` Job |
+| gel.tokengen.annotations | object | `{}` | Additional annotations for the `tokengen` Job |
+| gel.tokengen.extraVolumes | list | `[]` | Additional volumes for Pods |
+| gel.tokengen.extraVolumeMounts | list | `[]` | Additional volume mounts for Pods |
+| gel.tokengen.securityContext | object | `{"fsGroup":10001,"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001}` | Run containers as user `enterprise-logs(uid=10001)` |
+| gel.adminApi | object | `{"affinity":{},"annotations":{},"env":[],"extraArgs":{},"extraContainers":[],"extraVolumeMounts":[],"extraVolumes":[],"initContainers":[],"labels":{},"livenessProbe":{"httpGet":{"path":"/ready","port":"http-metrics"},"initialDelaySeconds":45},"nodeSelector":{},"persistence":{"subPath":null},"readinessProbe":{"httpGet":{"path":"/ready","port":"http-metrics"},"initialDelaySeconds":45},"replicas":1,"resources":{},"securityContext":{"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001},"service":{"annotations":{},"labels":{}},"strategy":{"type":"RollingUpdate"},"terminationGracePeriodSeconds":60,"tolerations":[]}` | Configuration for the `admin-api` target |
+| gel.adminApi.replicas | int | `1` | Define the amount of instances |
+| gel.adminApi.extraArgs | object | `{}` | Additional CLI arguments for the `admin-api` target |
+| gel.adminApi.labels | object | `{}` | Additional labels for the `admin-api` Deployment |
+| gel.adminApi.annotations | object | `{}` | Additional annotations for the `admin-api` Deployment |
+| gel.adminApi.service | object | `{"annotations":{},"labels":{}}` | Additional labels and annotations for the `admin-api` Service |
+| gel.adminApi.securityContext | object | `{"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001}` | Run container as user `enterprise-logs(uid=10001)` `fsGroup` must not be specified, because these security options are applied on container level not on Pod level. |
+| gel.adminApi.resources | object | `{}` | Request and limit Kubernetes resources -- Values are defined in small.yaml and large.yaml |
+| gel.adminApi.extraVolumes | list | `[]` | Additional volumes for Pods |
+| gel.adminApi.extraVolumeMounts | list | `[]` | Additional volume mounts for Pods |
+| gel.adminApi.affinity | object | `{}` | Affinity for admin-api Pods |
+| gel.adminApi.nodeSelector | object | `{}` | Node selector for admin-api Pods |
+| gel.adminApi.tolerations | list | `[]` | Tolerations for admin-api Pods |
+| gel.adminApi.terminationGracePeriodSeconds | int | `60` | Grace period to allow the admin-api to shutdown before it is killed |
+| gel.gateway | object | `{"affinity":{},"annotations":{},"env":[],"extraArgs":{},"extraContainers":[],"extraVolumeMounts":[],"extraVolumes":[],"initContainers":[],"labels":{},"livenessProbe":{"httpGet":{"path":"/ready","port":"http-metrics"},"initialDelaySeconds":45},"nodeSelector":{},"persistence":{"subPath":null},"readinessProbe":{"httpGet":{"path":"/ready","port":"http-metrics"},"initialDelaySeconds":45},"replicas":1,"resources":{},"securityContext":{"fsGroup":10001,"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001},"service":{"annotations":{},"labels":{}},"strategy":{"type":"RollingUpdate"},"terminationGracePeriodSeconds":60,"tolerations":[],"useDefaultProxyURLs":true}` | Configuration for the `gateway` target |
+| gel.gateway.replicas | int | `1` | Define the amount of instances |
+| gel.gateway.extraArgs | object | `{}` | Additional CLI arguments for the `gateway` target |
+| gel.gateway.labels | object | `{}` | Additional labels for the `gateway` Pod |
+| gel.gateway.annotations | object | `{}` | Additional annotations for the `gateway` Pod |
+| gel.gateway.service | object | `{"annotations":{},"labels":{}}` | Additional labels and annotations for the `gateway` Service |
+| gel.gateway.securityContext | object | `{"fsGroup":10001,"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001}` | Run container as user `enterprise-logs(uid=10001)` |
+| gel.gateway.resources | object | `{}` | Request and limit Kubernetes resources -- Values are defined in small.yaml and large.yaml |
+| gel.gateway.extraVolumes | list | `[]` | Additional volumes for Pods |
+| gel.gateway.extraVolumeMounts | list | `[]` | Additional volume mounts for Pods |
+| gel.gateway.affinity | object | `{}` | Affinity for gateway Pods |
+| gel.gateway.nodeSelector | object | `{}` | Node selector for gateway Pods |
+| gel.gateway.tolerations | list | `[]` | Tolerations for gateway Pods |
+| gel.gateway.terminationGracePeriodSeconds | int | `60` | Grace period to allow the gateway to shutdown before it is killed |
+| gel.compactor | object | `{"affinity":{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchExpressions":[{"key":"target","operator":"In","values":["compactor"]}]},"topologyKey":"kubernetes.io/hostname"},"weight":100}]}},"annotations":{},"env":[],"extraArgs":{},"extraContainers":[],"extraVolumeMounts":[],"extraVolumes":[],"initContainers":[],"labels":{},"livenessProbe":{"failureThreshold":20,"httpGet":{"path":"/ready","port":"http-metrics","scheme":"HTTP"},"initialDelaySeconds":180,"periodSeconds":30,"successThreshold":1,"timeoutSeconds":1},"nodeSelector":{},"persistentVolume":{"accessModes":["ReadWriteOnce"],"annotations":{},"enabled":true,"size":"2Gi","subPath":""},"readinessProbe":{"httpGet":{"path":"/ready","port":"http-metrics"},"initialDelaySeconds":60},"replicas":1,"resources":{},"securityContext":{"fsGroup":10001,"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001},"service":{"annotations":{},"labels":{}},"strategy":{"type":"RollingUpdate"},"terminationGracePeriodSeconds":300,"tolerations":[]}` | Configuration for the `compactor` target |
+| gel.compactor.replicas | int | `1` | Define the amount of instances |
+| gel.compactor.extraArgs | object | `{}` | Additional CLI arguments for the `compactor` target |
+| gel.compactor.labels | object | `{}` | Additional labels for the `compactor` Pod |
+| gel.compactor.annotations | object | `{}` | Additional annotations for the `compactor` Pod |
+| gel.compactor.service | object | `{"annotations":{},"labels":{}}` | Additional labels and annotations for the `compactor` Service |
+| gel.compactor.securityContext | object | `{"fsGroup":10001,"runAsGroup":10001,"runAsNonRoot":true,"runAsUser":10001}` | Run containers as user `enterprise-logs(uid=10001)` |
+| gel.compactor.resources | object | `{}` | Request and limit Kubernetes resources -- Values are defined in small.yaml and large.yaml |
+| gel.compactor.extraVolumes | list | `[]` | Additional volumes for Pods |
+| gel.compactor.extraVolumeMounts | list | `[]` | Additional volume mounts for Pods |
+| gel.compactor.affinity | object | `{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchExpressions":[{"key":"target","operator":"In","values":["compactor"]}]},"topologyKey":"kubernetes.io/hostname"},"weight":100}]}}` | Affinity for compactor Pods |
+| gel.compactor.nodeSelector | object | `{}` | Node selector for compactor Pods |
+| gel.compactor.tolerations | list | `[]` | Tolerations for compactor Pods |
+| gel.compactor.terminationGracePeriodSeconds | int | `300` | Grace period to allow the compactor to shutdown before it is killed |
 
 ## Contributing
 
