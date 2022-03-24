@@ -46,27 +46,6 @@ spec:
       securityContext:
         fsGroup: {{ .Values.gel.adminApi.securityContext.runAsGroup | int }}
       {{- end}}
-      initContainers:
-      # Taken from
-      # https://github.com/minio/charts/blob/a5c84bcbad884728bff5c9c23541f936d57a13b3/minio/templates/post-install-create-bucket-job.yaml
-      {{- if .Values.minio.enabled }}
-        - name: minio-mc
-          image: "{{ .Values.minio.mcImage.repository }}:{{ .Values.minio.mcImage.tag }}"
-          imagePullPolicy: {{ .Values.minio.mcImage.pullPolicy }}
-          command: ["/bin/sh", "/config/initialize"]
-          env:
-            - name: MINIO_ENDPOINT
-              value: {{ .Release.Name }}-minio
-            - name: MINIO_PORT
-              value: {{ .Values.minio.service.port | quote }}
-          volumeMounts:
-            - name: minio-configuration
-              mountPath: /config
-          {{- if .Values.minio.tls.enabled }}
-            - name: cert-secret-volume-mc
-              mountPath: {{ .Values.minio.configPathmc }}certs
-          {{ end }}
-        {{- end }}
       {{- if .Values.gel.image.pullSecrets }}
       imagePullSecrets:
       {{- range .Values.gel.image.pullSecrets }}
@@ -80,14 +59,6 @@ spec:
           args:
             - -target=admin-api
             - -config.file=/etc/loki/config/config.yaml
-            {{- if .Values.minio.enabled }}
-            - -admin.client.backend-type=s3
-            - -admin.client.s3.endpoint={{ template "enterprise-logs.minio" . }}
-            - -admin.client.s3.bucket-name=enterprise-logs-admin
-            - -admin.client.s3.access-key-id={{ .Values.minio.accessKey }}
-            - -admin.client.s3.secret-access-key={{ .Values.minio.secretKey }}
-            - -admin.client.s3.insecure=true
-            {{- end }}
             {{- range $key, $value := .Values.gel.adminApi.extraArgs }}
             - "-{{ $key }}={{ $value }}"
             {{- end }}
@@ -154,22 +125,5 @@ spec:
           emptyDir: {}
         {{- if .Values.gel.adminApi.extraVolumes }}
         {{ toYaml .Values.gel.adminApi.extraVolumes | nindent 8 }}
-        {{- end }}
-        {{- if .Values.minio.enabled }}
-        - name: minio-configuration
-          projected:
-            sources:
-            - configMap:
-                name: {{ .Release.Name }}-minio
-            - secret:
-                name: {{ .Release.Name }}-minio
-        {{- if .Values.minio.tls.enabled }}
-        - name: cert-secret-volume-mc
-          secret:
-            secretName: {{ .Values.minio.tls.certSecret }}
-            items:
-            - key: {{ .Values.minio.tls.publicCrt }}
-              path: CAs/public.crt
-        {{- end }}
         {{- end }}
 {{- end}}

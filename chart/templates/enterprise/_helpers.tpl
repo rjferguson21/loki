@@ -75,12 +75,3 @@ Create the app name of enterprise-logs clients. Defaults to the same logic as "e
 {{- end -}}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Create the service endpoint including port for MinIO.
-*/}}
-{{- define "enterprise-logs.minio" -}}
-{{- if .Values.minio.enabled -}}
-{{- printf "%s-%s.%s.svc:%s" .Release.Name "minio" .Release.Namespace (.Values.minio.service.port | toString) -}}
-{{- end -}}
-{{- end -}}

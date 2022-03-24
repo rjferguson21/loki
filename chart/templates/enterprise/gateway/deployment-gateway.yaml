@@ -59,14 +59,6 @@ spec:
             - -target=gateway
             - -config.file=/etc/loki/config/config.yaml
             - -log.level=debug
-            {{- if .Values.minio.enabled }}
-            - -admin.client.backend-type=s3
-            - -admin.client.s3.endpoint={{ template "enterprise-logs.minio" . }}
-            - -admin.client.s3.bucket-name=enterprise-logs-admin
-            - -admin.client.s3.access-key-id={{ .Values.minio.accessKey }}
-            - -admin.client.s3.secret-access-key={{ .Values.minio.secretKey }}
-            - -admin.client.s3.insecure=true
-            {{- end }}
             {{- if .Values.gel.gateway.useDefaultProxyURLs }}
             - -gateway.proxy.default.url=http://{{ template "loki.gatewayUrl" . }}.{{ .Release.Namespace }}.svc:3100
             - -gateway.proxy.admin-api.url=http://{{ template "enterprise-logs.adminApiFullname" . }}.{{ .Release.Namespace }}.svc:3100
