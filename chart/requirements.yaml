@@ -7,6 +7,5 @@ dependencies:
     version: "0.2.0"
     condition: loki-simple-scalable.enabled
   - name: loki
-    repository: https://grafana.github.io/helm-charts
-    version: "2.10.1"
+    version: "*.*.*"
     condition: loki.enabled
