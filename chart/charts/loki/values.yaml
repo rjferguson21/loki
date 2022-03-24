@@ -55,7 +55,7 @@ config:
     chunk_retain_period: 1m
     max_transfer_retries: 0
     wal:
-      dir: /data/loki/wal
+      dir: /var/loki/wal
     lifecycler:
       ring:
         kvstore:
@@ -88,19 +88,19 @@ config:
     http_listen_port: 3100
   storage_config:
     boltdb_shipper:
-      active_index_directory: /data/loki/boltdb-shipper-active
-      cache_location: /data/loki/boltdb-shipper-cache
+      active_index_directory: /var/loki/boltdb-shipper-active
+      cache_location: /var/loki/boltdb-shipper-cache
       cache_ttl: 24h         # Can be increased for faster performance over longer query periods, uses more disk space
       shared_store: filesystem
     filesystem:
-      directory: /data/loki/chunks
+      directory: /var/loki/chunks
   chunk_store_config:
     max_look_back_period: 0s
   table_manager:
     retention_deletes_enabled: false
     retention_period: 0s
   compactor:
-    working_directory: /data/loki/boltdb-shipper-compactor
+    working_directory: /var/loki/boltdb-shipper-compactor
     shared_store: filesystem
 # Needed for Alerting: https://grafana.com/docs/loki/latest/rules/
 # This is just a simple example, for more details: https://grafana.com/docs/loki/latest/configuration/#ruler_config
