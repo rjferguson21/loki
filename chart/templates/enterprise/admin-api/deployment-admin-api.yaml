@@ -32,7 +32,7 @@ spec:
         {{- if .Values.gel.useExternalConfig }}
         checksum/config: {{ .Values.gel.externalConfigVersion }}
         {{- else }}
-        checksum/config: {{ include (print $.Template.BasePath "/enterprise/secret-config.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/secret-config.yaml") . | sha256sum }}
         {{- end}}
         {{- with .Values.gel.adminApi.annotations }}
         {{- toYaml . | nindent 8 }}
@@ -58,7 +58,7 @@ spec:
           imagePullPolicy: {{ .Values.gel.image.pullPolicy }}
           args:
             - -target=admin-api
-            - -config.file=/etc/loki/config/config.yaml
+            - -config.file=/etc/loki/config/loki.yaml
             {{- range $key, $value := .Values.gel.adminApi.extraArgs }}
             - "-{{ $key }}={{ $value }}"
             {{- end }}
@@ -68,7 +68,7 @@ spec:
             - name: license
               mountPath: /etc/enterprise-logs/license
             - name: storage
-              mountPath: /data
+              mountPath: /var
               subPath: {{ .Values.gel.adminApi.persistence.subPath }}
             {{- if .Values.gel.adminApi.extraVolumeMounts }}
             {{ toYaml .Values.gel.adminApi.extraVolumeMounts | nindent 12 }}
@@ -112,7 +112,7 @@ spec:
           {{- if .Values.gel.useExternalConfig }}
             secretName: {{ .Values.gel.externalConfigName }}
           {{- else }}
-            secretName: enterprise-logs-config
+            secretName: loki-config
           {{- end }}
         - name: license
           secret:

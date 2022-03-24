@@ -30,7 +30,7 @@ spec:
         {{- if .Values.gel.useExternalConfig }}
         checksum/config: {{ .Values.gel.externalConfigVersion }}
         {{- else }}
-        checksum/config: {{ include (print $.Template.BasePath "/enterprise/secret-config.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/secret-config.yaml") . | sha256sum }}
         {{- end}}
         {{- with .Values.gel.gateway.annotations }}
         {{- toYaml . | nindent 8 }}
@@ -57,7 +57,7 @@ spec:
           imagePullPolicy: {{ .Values.gel.image.pullPolicy }}
           args:
             - -target=gateway
-            - -config.file=/etc/loki/config/config.yaml
+            - -config.file=/etc/loki/config/loki.yaml
             - -log.level=debug
             {{- if .Values.gel.gateway.useDefaultProxyURLs }}
             - -gateway.proxy.default.url=http://{{ template "loki.gatewayUrl" . }}.{{ .Release.Namespace }}.svc:3100
@@ -76,7 +76,7 @@ spec:
             - name: license
               mountPath: /etc/enterprise-logs/license
             - name: storage
-              mountPath: /data
+              mountPath: /var
               subPath: {{ .Values.gel.gateway.persistence.subPath }}
             {{- if .Values.gel.gateway.extraVolumeMounts }}
             {{ toYaml .Values.gel.gateway.extraVolumeMounts | nindent 12 }}
@@ -113,7 +113,7 @@ spec:
           {{- if .Values.gel.useExternalConfig }}
             secretName: {{ .Values.gel.externalConfigName }}
           {{- else }}
-            secretName: enterprise-logs-config
+            secretName: loki-config
           {{- end }}
         - name: license
           secret:

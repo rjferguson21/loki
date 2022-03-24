@@ -46,7 +46,7 @@ spec:
           image: {{ template "enterprise-logs.image" . }}
           imagePullPolicy: {{ .Values.gel.image.pullPolicy }}
           args:
-            - -config.file=/etc/loki/config/config.yaml
+            - -config.file=/etc/loki/config/loki.yaml
             - -target=tokengen
             - -tokengen.token-file=/shared/admin-token
             {{- range $key, $value := .Values.gel.tokengen.extraArgs }}
@@ -93,7 +93,7 @@ spec:
           {{- if .Values.gel.useExternalConfig }}
             secretName: {{ .Values.gel.externalConfigName }}
           {{- else }}
-            secretName: enterprise-logs-config
+            secretName: loki-config
           {{- end }}
         - name: license
           secret:
