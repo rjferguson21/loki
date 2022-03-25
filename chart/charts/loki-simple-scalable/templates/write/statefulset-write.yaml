@@ -44,7 +44,7 @@ spec:
           image: {{ include "loki.writeImage" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           args:
-            - -config.file=/etc/loki/config/config.yaml
+            - -config.file=/etc/loki/config/loki.yaml
             - -target=write
             {{- with .Values.write.extraArgs }}
             {{- toYaml . | nindent 12 }}

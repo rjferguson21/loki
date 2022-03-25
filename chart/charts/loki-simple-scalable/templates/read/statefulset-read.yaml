@@ -44,7 +44,7 @@ spec:
           image: {{ include "loki.readImage" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           args:
-            - -config.file=/etc/loki/config/config.yaml
+            - -config.file=/etc/loki/config/loki.yaml
             - -target=read
             {{- with .Values.read.extraArgs }}
             {{- toYaml . | nindent 12 }}

@@ -3,8 +3,7 @@ dependencies:
     version: 0.2.4
     repository: "oci://registry.dso.mil/platform-one/big-bang/apps/library-charts/gluon"
   - name: loki-simple-scalable
-    repository: https://grafana.github.io/helm-charts
-    version: "0.2.0"
+    version: "*.*.*"
     condition: loki-simple-scalable.enabled
   - name: loki
     version: "*.*.*"
