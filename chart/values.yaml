@@ -191,15 +191,19 @@ loki:
 
 loki-simple-scalable:
   enabled: false
-  image:
-    # -- The Docker registry
-    registry: registry1.dso.mil
-    # -- Docker image repository
-    repository: ironbank/opensource/grafana/loki
-    # -- Overrides the image tag whose default is the chart's appVersion
-    tag: 2.4.2
-    # -- Docker image pull policy
-    pullPolicy: IfNotPresent
+  loki:
+    image:
+      # -- The Docker registry
+      registry: registry1.dso.mil
+      # -- Docker image repository
+      repository: ironbank/opensource/grafana/loki
+      # -- Overrides the image tag whose default is the chart's appVersion
+      tag: 2.4.2
+      # -- Docker image pull policy
+      pullPolicy: IfNotPresent
+
+  gateway:
+    image: registry1.dso.mil/ironbank/opensource/nginx/nginx:1.21.6
 
 serviceAccount:
   create: true
