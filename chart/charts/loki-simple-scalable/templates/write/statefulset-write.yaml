@@ -56,7 +56,7 @@ spec:
             - name: grpc
               containerPort: 9095
               protocol: TCP
-            - name: http-memberlist
+            - name: tcp-memberlist
               containerPort: 7946
               protocol: TCP
           {{- with .Values.write.extraEnv }}

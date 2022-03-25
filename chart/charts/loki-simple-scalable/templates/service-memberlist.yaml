@@ -10,7 +10,7 @@ spec:
   ports:
     - name: http
       port: 7946
-      targetPort: http-memberlist
+      targetPort: tcp-memberlist
       protocol: TCP
   selector:
     {{- include "loki.selectorLabels" . | nindent 4 }}
