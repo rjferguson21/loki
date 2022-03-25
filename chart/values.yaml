@@ -203,7 +203,10 @@ loki-simple-scalable:
       pullPolicy: IfNotPresent
 
   gateway:
-    image: registry1.dso.mil/ironbank/opensource/nginx/nginx:1.21.6
+    image:
+      registry: registry1.dso.mil
+      repository: ironbank/opensource/nginx/nginx
+      tag: 1.21.6
 
 serviceAccount:
   create: true
