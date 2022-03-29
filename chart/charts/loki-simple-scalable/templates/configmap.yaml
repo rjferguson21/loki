@@ -1,4 +1,4 @@
-{{- if not .Values.loki.existingSecretForConfig -}}
+{{- if not .Values.global.existingSecretForConfig -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:

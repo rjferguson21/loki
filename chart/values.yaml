@@ -8,7 +8,8 @@ global:
     pullSecrets:
     - private-registry
 
-  useExternalConfig: false
+  createGlobalConfig: false
+  existingSecretForConfig: null
 
   objectStorage:
     endpoint: s3.amazonaws.com
