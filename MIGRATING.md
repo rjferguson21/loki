@@ -46,7 +46,7 @@ loki:
 # Using Simple Scalable Architecture
 To opt for the simple scalable architecture enable `loki-simple-scalable` and disable `loki`
 
-See [Configuration](#loki-configuration-options)
+See [Configuration](#loki-config-options) for options building the Loki config for the simple-scalable architecture
 
 ```
 loki-simple-scalable:
@@ -56,7 +56,7 @@ loki:
   enabled: false
 ```
 
-# Loki Configuration Options
+# Loki Config Options
 To specify a config file for Loki you can either:
 * Leverage the respective `config` object in either the `loki` and `loki-simple-scalable` subchart depending on which architecture you choose.
 *  Specify a secret to use with `global.existingSecretForConfig`
@@ -69,17 +69,18 @@ To specify a config file for Loki you can either:
 ### Existing Secret
 `.Values.global.existingSecretForConfig`
 
-# Refactored Structure (1.x.x) 
+# Refactored Structure (3.x.x) 
 The updated design includes the additional upstream of [simple-scalable](https://github.com/grafana/helm-charts/tree/main/charts/loki-simple-scalable) chart, as well as components from the [enterprise logs](https://github.com/grafana/helm-charts/tree/main/charts/enterprise-logs) chart.
 
 The previous chart implementation (`Loki 2.x.x-bb.x`), referenced the [loki monolith](https://github.com/grafana/helm-charts/tree/main/charts/loki) chart exclusively as its upstream. 
 
 ```mermaid
 flowchart TD
-   subgraph chart[Loki 1.x.x Chart]
+   subgraph chart[Loki 3.x.x Chart]
    et[./templates/enterprise/*]
-   loki-restructured[Chart.yaml] -- conditional dependency -->  oss-loki[./charts/loki]
-   loki-restructured[Chart.yaml] -- conditional dependency -->  oss-scalable[./charts/loki-simple-scalable]
+   loki-restructured[Chart] -- conditional dependency -->  oss-loki[./charts/loki]
+   loki-restructured[Chart] -- conditional dependency -->  oss-scalable[./charts/loki-simple-scalable]
+   loki-restructured[Chart] -- conditional dependency -->  et
    end
    et --> upstream-loki-el[https://github.com/grafana/helm-charts/tree/main/charts/enterprise-logs]
    oss-loki -- kpt upstream --> upstream-loki[https://github.com/grafana/helm-charts/tree/main/charts/loki]
@@ -90,7 +91,7 @@ flowchart TD
 ```mermaid
 flowchart TD
    S3[(S3)]
-   Logs--> Loki
+   Promtail--> Loki
    Grafana --> Loki --> S3
 ```
 
@@ -101,7 +102,7 @@ flowchart TD
    g[GEL Gateway] --> a[Admin API]  
    a[Admin API]
    end
-   Logs--> g[GEL Gateway] --> Loki --> S3
+   Promtail--> g[GEL Gateway] --> Loki --> S3
    Grafana --> g[GEL Gateway]
 ```
 
@@ -112,7 +113,7 @@ flowchart TD
    read[Loki Read] --> S3
    write[Loki Write]
    gateway[Loki Gateway] --> read
-   Logs--> gateway --> write --> S3
+   Promtail--> gateway --> write --> S3
    Grafana --> gateway
 ```
 
