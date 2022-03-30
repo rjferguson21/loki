@@ -3,10 +3,10 @@ dependencies:
   repository: oci://registry.dso.mil/platform-one/big-bang/apps/library-charts/gluon
   version: 0.2.4
 - name: loki-simple-scalable
-  repository: https://grafana.github.io/helm-charts
+  repository: file://deps/loki-simple-scalable
   version: 0.2.0
 - name: loki
-  repository: https://grafana.github.io/helm-charts
+  repository: file://deps/loki
   version: 2.10.1
-digest: sha256:a8669167cb36cf247f84c3d407d9fa117697ba603390efffb8a4fc3cac8756b7
-generated: "2022-03-21T09:00:17.67870663-05:00"
+digest: sha256:a0856f90822fdffcc0eb777d4f635a4f8a490e2e191bac00896d7d5ede80bae1
+generated: "2022-03-30T11:21:47.500120589-05:00"

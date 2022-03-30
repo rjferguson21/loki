@@ -3,8 +3,10 @@ dependencies:
     version: 0.2.4
     repository: "oci://registry.dso.mil/platform-one/big-bang/apps/library-charts/gluon"
   - name: loki-simple-scalable
-    version: "*.*.*"
+    repository: file://deps/loki-simple-scalable
+    version: 0.2.0
     condition: loki-simple-scalable.enabled
   - name: loki
-    version: "*.*.*"
+    repository: file://deps/loki
+    version: 2.10.1
     condition: loki.enabled
