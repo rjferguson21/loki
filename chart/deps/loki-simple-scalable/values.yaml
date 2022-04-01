@@ -497,7 +497,7 @@ gateway:
         {{- end }}
 
         server {
-          listen             8080;
+          listen             3100;
 
           {{- if .Values.gateway.basicAuth.enabled }}
           auth_basic           "Loki";
