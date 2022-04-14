@@ -149,7 +149,7 @@ loki netpol matchLabels
 */}}
 {{- define "loki.matchLabels" -}}
   {{- if (index .Values "loki-simple-scalable").enabled }}
-  app.kubernetes.io/name: {{ include "loki.name" . }}
+  app.kubernetes.io/name: {{ include "loki.fullname" . }}
   {{- else }}
   app: loki
   {{- end }}
