@@ -148,9 +148,9 @@ gateway admin-api
 loki netpol matchLabels
 */}}
 {{- define "loki.matchLabels" -}}
-  {{- if (index .Values "loki-simple-scalable").enabled }}
-  app.kubernetes.io/instance: {{ .Release.Name }}
-  {{- else }}
+  {{- if .Values.loki.enabled }}
   app: loki
+  {{- else }}
+  app.kubernetes.io/instance: {{ .Release.Name }}
   {{- end }}
 {{- end }}
