@@ -16,9 +16,7 @@ spec:
     ports:
     - port: 15020
       protocol: TCP
-  podSelector:
-    matchLabels:
-      {{ include "loki.matchLabels" . | nindent 6 }}
+  podSelector: {}
   policyTypes:
   - Ingress
 {{- end }}
