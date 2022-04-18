@@ -59,6 +59,14 @@ Docker image name
 {{- end -}}
 
 {{/*
+Tokengen image name
+*/}}
+{{- define "enterprise-logs.tokenImage" -}}
+{{- $tag := .Values.gel.tokengen.image.tag | toString -}}
+{{- printf "%s/%s:%s" .Values.gel.tokengen.image.registry .Values.gel.tokengen.image.repository $tag -}}
+{{- end -}}
+
+{{/*
 Create the app name of enterprise-logs clients. Defaults to the same logic as "enterprise-logs.fullname", and default client expects "prometheus".
 */}}
 {{- define "client.name" -}}

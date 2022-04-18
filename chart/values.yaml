@@ -334,6 +334,17 @@ gel:
   tokengen:
     # -- Whether the job should be part of the deployment
     enable: true
+
+    image:
+      # -- The Docker registry
+      registry: registry1.dso.mil
+      # -- Docker image repository
+      repository: ironbank/opensource/kubernetes/kubectl
+      # -- Overrides the image tag whose default is the chart's appVersion
+      tag: v1.22.2
+      # -- Docker image pull policy
+      pullPolicy: IfNotPresent
+
     # -- Additional CLI arguments for the `tokengen` target
     extraArgs: {}
     # -- Additional Kubernetes environment
