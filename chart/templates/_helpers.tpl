@@ -154,3 +154,23 @@ loki netpol matchLabels
   app.kubernetes.io/instance: {{ .Release.Name }}
   {{- end }}
 {{- end }}
+
+{{- define "loki.writeHost" -}}
+{{- if .Values.gel.enabled }}
+{{- template "enterprise-logs.gatewayFullname" . }}
+{{- else if .Values.loki.enabled }}
+{{- include "loki.fullname" . }}
+{{- else }}
+{{- include "loki.fullname" . }}-write
+{{- end }}
+{{- end }}
+
+{{- define "loki.readHost" -}}
+{{-  if .Values.gel.enabled }}
+{{- template "enterprise-logs.gatewayFullname" . }}
+{{- else if .Values.loki.enabled }}
+{{- include "loki.fullname" . }}
+{{- else }}
+{{- include "loki.fullname" . }}-read
+{{- end }}
+{{- end }}

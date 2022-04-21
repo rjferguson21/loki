@@ -1,0 +1,36 @@
+{{- if .Values.istio.enabled -}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: loki-vs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: loki
+spec:
+  gateways:
+  {{- range .Values.istio.gateways }}
+    - {{ . }}
+  {{- end }}
+  hosts:
+  {{- range .Values.istio.hosts }}
+    - {{ tpl . $}}
+  {{- end }}
+  http:
+  - name: "write"
+    match:
+    - uri:
+        prefix: "/api/prom/push"
+    - uri:
+        prefix: "/loki/api/v1/push"
+    route:
+    - destination:
+        port:
+          number: 3100
+        host: {{ include "loki.writeHost" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  - name: "read"
+    route:
+    - destination:
+        port:
+          number: 3100
+        host: {{ include "loki.readHost" . }}.{{ .Release.Namespace }}.svc.cluster.local
+{{- end }}
