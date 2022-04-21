@@ -30,7 +30,7 @@ spec:
   ports:
     - port: {{ .Values.service.port }}
       protocol: TCP
-      name: grpc-metrics
+      name: http-metrics
       targetPort: {{ .Values.service.targetPort }}
 {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort))) }}
       nodePort: {{ .Values.service.nodePort }}
