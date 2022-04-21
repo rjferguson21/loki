@@ -155,6 +155,9 @@ loki:
     port: 7946
     protocol: TCP
 
+  podLabels:
+    app.kubernetes.io/part-of: memberlist
+
   fullnameOverride: logging-loki
 
   readinessProbe:
