@@ -12,4 +12,4 @@ dependencies:
   repository: file://./deps/minio
   version: 4.4.12-bb.1
 digest: sha256:08eaf5c4e4e1e7ab4685b82fc1f00a1628ad7960616f9ee7401b8b39ed0c5316
-generated: "2022-04-08T15:27:26.0862784-06:00"
+generated: "2022-04-22T10:44:49.507762276-05:00"
