@@ -1,11 +1,12 @@
-{{- if .Values.istio.enabled -}}
+# Virtual Service works with OSS Loki, but behind GEL flag for now
+{{- if and .Values.istio.enabled .Values.gel.enabled -}}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: loki-vs
+  name: loki
   namespace: {{ .Release.Namespace }}
   labels:
-    app: loki
+    app.kubernetes.io/name: loki
 spec:
   gateways:
   {{- range .Values.istio.gateways }}
